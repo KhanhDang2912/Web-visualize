@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualize</title>
+    <style>
+        body {
+            background-size: cover;
+            font-family: Arial, sans-serif;
+        }
+
+        input {
+            max-width: 60px;
+        }
+
+        .control {
+            width: 136.7px;
+            height: 140px;
+            border: 1px solid black;
+            padding-left: 5px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+        button:hover {
+            cursor: pointer;
+            background-color: rgb(201, 201, 201);
+            border-color: rgb(153, 153, 153);
+        }
+
+        hr {
+            width: 100%;
+            height: 2px;
+            background-color: black;
+        }
+
+        #cmd {
+            margin-top: 15px;
+            margin-left: 10px;
+            color: rgb(187, 187, 187);
+            font-size: larger;
+            font-weight: bolder;
+            min-width: 66.7px;
+            max-height: 123.2px;
+        }
+
+        #S-text,
+        #j-text {
+            margin-top: 28px;
+            text-wrap: nowrap;
+        }
+
+        #inputNumber {
+            padding: 10px;
+            font-size: 18px;
+        }
+
+        .box {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            margin: 5px;
+            line-height: 40px;
+            font-size: 20px;
+            text-align: center;
+            background-color: lightgray;
+            border-radius: 5px;
+        }
+
+        .boxfake {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            margin: 5px;
+            line-height: 40px;
+            font-size: 20px;
+            text-align: center;
+            background-color: white;
+            border-radius: 5px;
+        }
+
+        .cell {
+            display: inline-block;
+            margin-bottom: 10px;
+            margin-right: 5px;
+            font-size: 17px;
+        }
+
+        #boxContainer,
+        #maskContainer,
+        #result {
+            display: flex;
+            flex-wrap: nowrap;
+        }
+
+        .present {
+            align-items: start;
+            margin-left: 20px;
+            margin-bottom: 40px;
+            max-width: 316.7px;
+            overflow-y: auto;
+        }
+
+        .coinmaster {
+            margin-left: 20px;
+            height: 259px;
+            overflow-x: auto;
+            background: #dddddd;
+            border-radius: 7px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+        .output {
+            margin-left: 20px;
+        }
+
+        #term {
+            margin-right: 10px;
+            min-width: 100px;
+            max-width: 133px;
+            text-wrap: nowrap;
+            overflow-x: auto;
+        }
+
+        #sum {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .line {
+            width: 2px;
+            max-width: 2px;
+            height: calc(100%+20px);
+            /* background-color: black; */
+            margin-right: 10px;
+            margin-left: 10px;
+        }
+
+        #bitwise {
+            margin-top: 117px;
+            width: 40px;
+        }
+
+        #reverseContainer {
+            margin-top: 20px;
+        }
+
+        .code-container {
+            width: 400px;
+            height: 695px;
+            background-color: #e6e6e6;
+            padding-top: 0px;
+            margin-right: 20px;
+            overflow-y: hidden;
+            border-radius: 10px;
+            left: 0;
+            top: 0;
+            white-space: pre-wrap;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-container pre {
+            margin-top: -47px;
+            margin-bottom: -50px;
+        }
+
+        .code-container code {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #333;
+            line-height: 1.5;
+            top: 0;
+        }
+
+        #dp-container {
+            margin-left: 40px;
+            max-height: 695px;
+            overflow-y: auto;
+        }
+
+        #dp-array {
+            text-wrap: nowrap;
+        }
+
+        #bit-array {
+            margin-right: 5px;
+            min-width: 48px;
+            text-wrap: nowrap;
+        }
+
+        .congthuc {
+            font-weight: bolder;
+        }
+
+        .boxbitdp,
+        .boxdp,
+        .congthuc {
+            line-height: 25px;
+        }
+
+        nav {
+            position: fixed;
+            width: 250px;
+            height: 100%;
+            background: #d8d8d8;
+            transition: ease-in-out 0.5s;
+            border-left: 1px solid #000;
+            right: 0;
+            top: 0;
+        }
+
+        nav.hide {
+            width: 0;
+        }
+
+        nav .menu-content {
+            width: 100%;
+            overflow: hidden;
+            text-wrap: nowrap;
+            padding-left: 10px;
+        }
+
+        nav .toggle-menu {
+            position: absolute;
+            top: 0;
+            left: -36px;
+            width: 35px;
+            height: 35px;
+            background: #d7d7d7;
+            border-radius: 0 0 0 10px;
+            cursor: pointer;
+            transition: linear 0.1s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        nav .toggle-menu:hover {
+            background: #bfbfbf;
+        }
+    </style>
+    <style>
+        #network {
+            width: 800px;
+            height: 400px;
+            border: 1px solid #7e7e7e;
+            margin-top: 0px;
+        }
+
+        .toolbar {
+            margin-bottom: 20px;
+        }
+
+        .toolbar button {
+            margin-right: 10px;
+        }
+
+        textarea {
+            width: 100px;
+            height: 95px;
+            margin-bottom: 10px;
+            /* color: #535353; */
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="toggle-menu"><strong>☰</strong></div>
+        <div class="menu-content">
+            <h2 style="text-align: center;">NHÓM 4</h2>
+            <p>
+                - Phan Khánh Đăng <br>
+                - Bùi Hữu Nhật Minh <br>
+                - Lê Hồ Minh Quân <br>
+                - Trương Quang Huy <br>
+                - Nguyễn Lê Thái Bảo
+            </p>
+            <a href="https://docs.google.com/document/d/1ZhZtlXSUOJ9lLlgl06BNbm3WVRacsn1yCePBQcUOw5s/edit?tab=t.0">
+                <h2>BÁO CÁO WEB</h2>
+            </a>
+            <h3 style="margin-bottom: 5px;">Đề bài DP Bitmask:</h3>
+            <p style="text-wrap: wrap; width: 240px; margin-top: 5px;">Cho hai số nguyên dương n, m và một mảng a
+                gồm n số nguyên
+                dương. Gọi các loại đồng xu là
+                tổng
+                từng tập con của mảng a. Bạn cần tìm số lượng ít nhất các đồng xu mà bạn có thể sử dụng để đạt
+                được
+                tổng chính xác là m. Biết rằng có thể sử dụng mỗi đồng xu nhiều lần.
+            </p>
+            <p style="margin-bottom: 5px;"><strong>Giới hạn:</strong></p>
+            <p style="margin-top: 5px;">
+                - n &lt;= 10 <br>
+                - m,a[i] &lt;= 1000
+            </p>
+            <a href="https://marisaoj.com/problem/134">
+                <h3>Đề bài Cây khung nhỏ nhất</h3>
+            </a>
+        </div>
+    </nav>
+    <div id="dp_bitmask" style="display: flex; max-height: 695px;">
+        <div class="code-container">
+            <pre><code>
+const int maxn = 20;
+ll dp[100005];
+ll a[maxn];
+int main(){
+ ll n,m;
+ cin>>n>>m;
+ for(ll i=1;i<=100005;i++) {dp[i]=1e9;}
+ for(ll i=0;i&lt;n;i++) {cin>>a[i];}
+ vector&lt;ll>v;
+ <span id="highlightS">for(ll S=1;S&lt;(1&lt;&lt;n);S++){</span>
+  ll sum=0;
+  <span id="highlightMask">for(ll mask=0;mask&lt;n;mask++){</span>
+   <span id="highlightRes">if(S&(1&lt;&lt;mask)) {sum+=a[mask];}</span>
+  }
+  <span id="highlightSum">v.push_back(sum);</span>
+ }
+ dp[0]=0;
+ sort(v.begin(),v.end());
+ v.erase(unique(v.begin(),v.end()),v.end());
+ <span id="highlightDPi">for(ll i=1;i<=m;i++){</span>
+    <span id="highlightDPj">for(ll j=0;j&lt;v.size();j++){</span>
+        <span id="highlightDPbr">if(v[j]>i) {break;}</span>
+        <span id="highlightDPsol">dp[i]=min(dp[i],dp[i-v[j]]+1);</span>
+  }
+ }
+ <span id="highlightDPout">if(dp[m]==1e9) cout&lt;&lt;-1;
+ else cout&lt;&lt;dp[m];</span>
+ return 0;
+}
+            </code></pre>
+        </div>
+        <div id="bitmask-container">
+            <h1>DP Bitmask</h1>
+            <div style="display: flex;">
+                <div>
+                    <div class="present" style="display: flex;">
+                        <div id="bitwise">AND</div>
+                        <div id="allforone">
+                            <div id="indexCont">
+                                <div class="boxfake">0</div>
+                            </div>
+                            <div id="boxContainer">
+                                <div class="box">0</div>
+                            </div>
+                            <div id="maskContainer">
+                                <div class="box">0</div>
+                            </div>
+                            <hr>
+                            <div id="result">
+                                <div class="box">0</div>
+                            </div>
+                        </div>
+                        <div id="cmd">
+                            <div id="i-text">= a [ i ]</div>
+                            <div id="S-text">= S = 0</div>
+                            <div id="j-text">= mask</div>
+                        </div>
+                    </div>
+                    <div class="control">
+                        <label for="inputN">n = </label>
+                        <input type="number" id="inputN" value="1" min="1" max="10">
+                        <br><br>
+
+                        <label for="inputM">m = </label>
+                        <input type="number" id="inputM" value="1" min="1" max="1000">
+                        <br><br>
+
+                        <label for="inputA">a[n] = </label>
+                        <input type="text" id="inputA" placeholder="1,2,3">
+                        <br><br>
+
+                        <button onclick="calculate()">Go</button>
+                    </div>
+                </div>
+                <div style="max-width: 300px;">
+                    <div class="coinmaster" style="display: flex;">
+                        <div class="line"></div>
+                        <div>
+                            <h3 style="margin-top: 0px;"><strong>Số hạng</strong></h3>
+                            <div id="term"></div>
+                        </div>
+                        <div class="line"></div>
+                        <div style="margin-left: 10px;">
+                            <h3 style="margin-top: 0px;"><strong>Tổng</strong></h3>
+                            <div id="sum"></div>
+                        </div>
+                        <div class="line"></div>
+                    </div>
+                    <div class="output">
+                        <div id="ketqua"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div id="dp-container">
+            <h3>Mảng DP:</h3>
+            <div style="display: flex;">
+                <div id="bit-array">
+                </div>
+                <div id="dp-array">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let timerId = null;
+
+        async function calculate() {
+            if (timerId) {
+                clearTimeout(timerId);
+                timerId = null;
+            }
+
+            const n = parseInt(document.getElementById('inputN').value);
+            const m = parseInt(document.getElementById('inputM').value);
+            const container = document.getElementById('boxContainer');
+            const mask = document.getElementById('maskContainer');
+            const res = document.getElementById('result');
+            const array = document.getElementById('inputA').value.split(',').map(Number);
+            const reversedArray = array.reverse();
+            const reverseContainer = document.getElementById('indexCont');
+            const term = document.getElementById('term');
+            const sumValue = document.getElementById('sum');
+            const resultDiv = document.getElementById('ketqua');
+            const dpContainer = document.getElementById('dp-array');
+            const bitContainer = document.getElementById('bit-array');
+            const v = [];
+
+            if (reversedArray.length !== n) {
+                alert('vui lòng nhập ' + n + ' số trong mảng a!');
+                return;
+            }
+
+            container.innerHTML = '';
+            mask.innerHTML = '';
+            res.innerHTML = '';
+            reverseContainer.innerHTML = '';
+            term.innerHTML = '';
+            sumValue.innerHTML = '';
+            resultDiv.innerHTML = '';
+            dpContainer.innerHTML = '';
+            bitContainer.innerHTML = '';
+
+            for (let char of reversedArray) {
+                const box = document.createElement('div');
+                box.className = 'boxfake';
+                box.textContent = char;
+                reverseContainer.appendChild(box);
+            }
+
+            for (let i = 0; i < n; i++) {
+                const box1 = document.createElement('div');
+                box1.className = 'box';
+                box1.textContent = '0';
+                container.appendChild(box1);
+
+                const box2 = document.createElement('div');
+                box2.className = 'box';
+                box2.textContent = '0';
+                mask.appendChild(box2);
+
+                const box3 = document.createElement('div');
+                box3.className = 'box';
+                box3.textContent = '0';
+                res.appendChild(box3);
+            }
+
+            let currentS = 1;
+            let ck = 1;
+            let currentBitPosition = 0;
+            let cplus;
+            let summ = 0;
+
+            async function showStep() {
+                return new Promise(async resolve => {
+                    resetHighlightCode();
+                    container.innerHTML = '';
+
+                    const numberInput = currentS.toString(2).padStart(n, '0');
+
+                    for (let bit of numberInput) {
+                        const box = document.createElement('div');
+                        box.className = 'box';
+                        box.textContent = bit;
+                        container.appendChild(box);
+                        document.getElementById('S-text').innerHTML = '= S = ' + currentS;
+                    }
+
+                    if (ck) {
+                        function showS() {
+                            return new Promise(resolve => {
+                                resetHighlight();
+
+                                mask.innerHTML = '';
+                                res.innerHTML = '';
+
+                                for (let i = 0; i < n; i++) {
+                                    const box2 = document.createElement('div');
+                                    box2.className = 'box';
+                                    box2.textContent = '0';
+                                    mask.appendChild(box2);
+
+                                    const box3 = document.createElement('div');
+                                    box3.className = 'box';
+                                    box3.textContent = '0';
+                                    res.appendChild(box3);
+                                }
+
+                                const newRow = document.createElement('div');
+                                newRow.className = 'row';
+                                term.appendChild(newRow);
+                                highlightCode(1);
+                                ck = 0;
+                                cplus = false;
+                                summ = 0;
+
+                                setTimeout(() => {
+                                    resolve();
+                                }, 1200);
+                            });
+                        }
+                        await showS();
+                    }
+
+                    mask.innerHTML = '';
+                    res.innerHTML = '';
+                    resetHighlightCode();
+                    highlightCode(2);
+
+                    const maskBinary = (1 << currentBitPosition).toString(2).padStart(n, '0');
+
+                    for (let bit of maskBinary) {
+                        const box = document.createElement('div');
+                        box.className = 'box';
+                        box.textContent = bit;
+                        mask.appendChild(box);
+                    }
+
+                    const resultValue = currentS & (1 << currentBitPosition);
+                    const resultBinary = resultValue.toString(2).padStart(n, '0');
+
+                    for (let bit of resultBinary) {
+                        const box = document.createElement('div');
+                        box.className = 'box';
+                        box.textContent = bit;
+                        res.appendChild(box);
+                    }
+
+                    const bitIndex = maskBinary.indexOf('1');
+                    highlightBitAtPosition(bitIndex, n);
+
+                    const resultBoxes = document.getElementById('result').children;
+
+                    for (let i = 0; i < resultBoxes.length; i++) {
+                        if (resultBoxes[i].textContent === '1') {
+                            if (cplus) {
+                                const plusSign = document.createElement('div');
+                                plusSign.className = 'cell';
+                                plusSign.textContent = ' + ';
+                                term.appendChild(plusSign);
+                            }
+                            cplus = true;
+
+                            const valueBox = document.createElement('div');
+                            valueBox.className = 'cell';
+                            valueBox.textContent = reverseContainer.children[i].textContent;
+                            term.appendChild(valueBox);
+
+                            summ += parseInt(reverseContainer.children[i].textContent);
+                            highlightCode(3);
+
+                            break;
+                        }
+                    }
+
+                    currentBitPosition++;
+                    if (currentBitPosition >= n) {
+                        currentBitPosition = 0;
+                        currentS++;
+                        ck = 1;
+
+                        const tong = document.createElement('div');
+                        tong.className = 'cell';
+                        tong.textContent = summ;
+                        sumValue.appendChild(tong);
+
+                        v.push(summ);
+                        highlightCode(4);
+                    }
+
+                    if (currentS < (1 << n)) {
+                        timerId = setTimeout(() => {
+                            showStep().then(resolve); // Đợi hàm showStep hoàn thành
+                        }, 1400);  // Lưu lại ID của setTimeout
+                    } else {
+                        timerId = null;  // Khi hoàn thành, đặt lại ID
+                        resolve(); // Đánh dấu việc hoàn thành showStep
+                    }
+                });
+            }
+            await showStep();
+
+            setTimeout(() => {
+                resetHighlight();
+                resetHighlightCode();
+            }, 1000);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            bitContainer.innerHTML += '<div class="boxbitdp">dp[0] = </div>';
+            dpContainer.innerHTML += '<div class="boxdp">0</div>';
+
+            const uniqueSubsets = [...new Set(v)].sort((a, b) => a - b);
+
+            const MAX_VALUE = 1e9;
+            const dp = new Array(m + 1).fill(MAX_VALUE);
+            dp[0] = 0;
+
+            const coinCombinations = new Array(m + 1).fill(null).map(() => []);
+            coinCombinations[0] = [[]];
+
+            if (uniqueSubsets.length === 0) {
+                resultDiv.innerHTML += `<p><strong>Không có giá trị đồng xu nào hợp lệ!</strong></p>`;
+                return;
+            }
+
+            async function showAns() {
+                return new Promise(async resolve => {
+                    resultDiv.innerHTML += `<p style="margin: 0px; line-height: 30px;"><strong>Các giá trị đồng xu khác nhau: </strong><br>${uniqueSubsets.join(', ')}</p>`;
+
+                    let i = 1;
+                    async function showDP() {
+                        const boxBitDp = document.createElement('div');
+                        const boxdpContainer = document.createElement('div');
+                        const boxdp = document.createElement('div');
+                        const congthuc = document.createElement('div');
+
+                        resetHighlightCode();
+
+                        async function firstdp() {
+                            return new Promise(resolve => {
+                                setTimeout(() => {
+                                    boxBitDp.className = 'boxbitdp';
+                                    boxBitDp.textContent = 'dp[' + i + '] = ';
+                                    bitContainer.appendChild(boxBitDp);
+
+                                    // Tạo một container mới chứa cả boxdp và congthuc
+                                    boxdpContainer.className = 'boxdp-congthuc-container';
+
+                                    boxdp.className = 'boxdp';
+                                    boxdp.textContent = '1000000000';
+                                    boxdpContainer.appendChild(boxdp);
+
+                                    congthuc.className = 'congthuc';
+                                    boxdpContainer.appendChild(congthuc);
+
+                                    dpContainer.appendChild(boxdpContainer);
+
+                                    highlightCode(5);
+                                    resolve();
+                                }, 1000);
+                            });
+                        }
+                        await firstdp();
+
+                        let j = 0;
+                        async function compare() {
+                            return new Promise(resolve => {
+                                setTimeout(() => {
+                                    congthuc.innerHTML = '';
+                                    resetHighlightCode();
+                                    if (j < uniqueSubsets.length) {
+                                        const coin = uniqueSubsets[j];
+                                        highlightCode(6);
+                                        if (coin > i) {
+                                            i++;
+                                            if (i <= m) {
+                                                highlightCode(7);
+                                                setTimeout(() => showDP(), 1500);
+                                            } else {
+                                                const result = dp[m] === MAX_VALUE ? -1 : dp[m];
+                                                resetHighlightCode();
+                                                highlightCode(9);
+                                                resultDiv.innerHTML += `<p style="margin: 0px; line-height: 30px;"><strong>Kết quả: </strong><br>Số lượng ít nhất cần sử dụng là ${result}</p>`;
+                                            }
+                                            return;
+                                        }
+
+                                        const fc = document.createElement('div');
+                                        fc.textContent = `dp[${i}] = min(dp[${i}],dp[${i - coin}]+1) = min(${dp[i]},${dp[i - coin] + 1})`;
+                                        congthuc.appendChild(fc);
+
+                                        if (dp[i] > dp[i - coin] + 1) {
+                                            dp[i] = dp[i - coin] + 1;
+                                        }
+
+                                        highlightCode(8);
+
+                                        boxdp.textContent = dp[i];
+
+                                        j++;
+                                        setTimeout(() => compare(), 1500);
+                                    } else {
+                                        i++;
+                                        if (i <= m) {
+                                            setTimeout(() => showDP(), 1500);
+                                        } else {
+                                            const result = dp[m] === MAX_VALUE ? -1 : dp[m];
+                                            resetHighlightCode();
+                                            highlightCode(9);
+                                            resultDiv.innerHTML += `<p style="margin: 0px; line-height: 30px;"><strong>Kết quả: </strong><br>Số lượng ít nhất cần sử dụng là ${result}</p>`;
+                                        }
+                                    }
+                                    resolve();
+                                }, 1500);
+                            });
+                        }
+                        compare();
+                    }
+                    setTimeout(() => showDP(), 100);
+                    resolve();
+                });
+            }
+            setTimeout(() => showAns(), 200);
+        }
+
+        function highlightBitAtPosition(bitIndex, totalLength) {
+            if (bitIndex === -1) return;  // Nếu không tìm thấy bit 1, không làm gì cả
+
+            const indexBoxes = document.getElementById('indexCont').children;
+            const containerBoxes = document.getElementById('boxContainer').children;
+            const maskBoxes = document.getElementById('maskContainer').children;
+            const resultBoxes = document.getElementById('result').children;
+
+            resetHighlight()
+
+            if (indexBoxes[bitIndex]) indexBoxes[bitIndex].style.backgroundColor = 'yellow';
+            if (containerBoxes[bitIndex]) containerBoxes[bitIndex].style.backgroundColor = 'yellow';
+            if (maskBoxes[bitIndex]) maskBoxes[bitIndex].style.backgroundColor = 'yellow';
+            if (resultBoxes[bitIndex]) resultBoxes[bitIndex].style.backgroundColor = 'yellow';
+        }
+
+        function resetHighlight() {
+            const boxes = document.querySelectorAll('.box');
+            const boxfakees = document.querySelectorAll('.boxfake');
+            boxes.forEach(box => box.style.backgroundColor = 'lightgray');
+            boxfakees.forEach(box => box.style.backgroundColor = 'white');
+        }
+
+        function highlightCode(zzz) {
+            if (zzz === 1) {
+                const colorS = document.getElementById('highlightS');
+                colorS.style.backgroundColor = 'yellow';
+            }
+            else if (zzz === 2) {
+                const colorMask = document.getElementById('highlightMask');
+                colorMask.style.backgroundColor = 'yellow';
+            }
+            else if (zzz === 3) {
+                const colorRes = document.getElementById('highlightRes');
+                colorRes.style.backgroundColor = 'yellow';
+            }
+            else if (zzz === 4) {
+                const colorSum = document.getElementById('highlightSum');
+                colorSum.style.backgroundColor = 'yellow';
+            }
+            else if (zzz === 5) {
+                document.getElementById('highlightDPi').style.backgroundColor = 'yellow';
+            }
+            else if (zzz === 6) {
+                document.getElementById('highlightDPj').style.backgroundColor = 'yellow';
+            }
+            else if (zzz === 7) {
+                document.getElementById('highlightDPbr').style.backgroundColor = 'yellow';
+            }
+            else if (zzz === 8) {
+                document.getElementById('highlightDPsol').style.backgroundColor = 'yellow';
+            }
+            else if (zzz === 9) {
+                document.getElementById('highlightDPout').style.backgroundColor = 'yellow';
+            }
+        }
+
+        function resetHighlightCode() {
+            const colorS = document.getElementById('highlightS');
+            const colorMask = document.getElementById('highlightMask');
+            const colorRes = document.getElementById('highlightRes');
+            const colorSum = document.getElementById('highlightSum');
+
+            colorS.style.backgroundColor = '#e6e6e6';
+            colorMask.style.backgroundColor = '#e6e6e6';
+            colorRes.style.backgroundColor = '#e6e6e6';
+            colorSum.style.backgroundColor = '#e6e6e6';
+            document.getElementById('highlightDPi').style.backgroundColor = '#e6e6e6';
+            document.getElementById('highlightDPj').style.backgroundColor = '#e6e6e6';
+            document.getElementById('highlightDPbr').style.backgroundColor = '#e6e6e6';
+            document.getElementById('highlightDPsol').style.backgroundColor = '#e6e6e6';
+            document.getElementById('highlightDPout').style.backgroundColor = '#e6e6e6';
+        }
+    </script>
+    <script>
+        const nav = document.querySelector('nav');
+        const toggle_menu = document.querySelector('.toggle-menu');
+
+        toggle_menu.onclick = function () {
+            nav.classList.toggle('hide');
+        }
+    </script>
+
+    <hr>
+    <div id="spanning_tree" style="display: flex;">
+        <div class="code-container">
+            <pre id="code-kruskal"><code>
+bool cmp(g x,g y)
+{
+    return x.w < y.w;
+}
+int main()
+{
+    <span id="k-sort" class="k">sort(a+1,a+m+1,cmp);</span>
+    ll ans = 0,cnt = 0;
+    <span id="k-for">for(ll i = 1;i<=m;i++)</span>
+    {
+        ll u = a[i].u;
+        ll v = a[i].v;
+        ll w = a[i].w;
+        <span id="k-if">if(Find(u) != Find(v))</span>
+        {
+            <span id="k-add1">Uni(u,v);</span>
+            <span id="k-add2">ans+=w;</span>
+            <span id="k-add3">cnt++;</span>
+        }
+        <span id="k-ifbr">if(cnt == n - 1)</span>
+        {
+            <span id="k-br">break;</span>
+        }
+    }
+    <span id="k-ans">cout&lt;&lt;ans;</span>
+}
+            </code></pre>
+            <pre id="code-prim" class="hidden" style="margin-top: -70px; margin-bottom: -50px;"><code>
+ll ans = 0;
+b[num] = 0;
+pq.push({0,num});
+<span id="p-while">while(!pq.empty())</span>
+{
+    <span id="p-node1">auto it = pq.top();</span>
+    <span id="p-node2">pq.pop();</span>
+    <span id="p-node3">ll cur = it.first;</span>
+    <span id="p-node4">ll u = it.second;</span>
+    <span id="p-if1">if(cur != b[u])</span>
+    {
+        <span id="p-con">continue;</span>
+    }
+    <span id="p-add">ans+=b[u];</span>
+    b[u] = LLONG_MIN;
+    <span id="p-for">for(auto v : a[u])</span>
+    {
+        ll x = v.first;
+        ll y = v.second;
+        <span id="p-if2">if(b[x] > y)</span>
+        {
+            <span id="p-ne1">b[x] = y;</span>
+            <span id="p-ne2">pq.push({y,x});</span>
+        }
+    }
+}
+<span id="p-ans">cout&lt;&lt;ans;</span>
+            </code></pre>
+        </div>
+        <div id="tree-container">
+            <h1>Minimum Spanning Tree</h1>
+            <div style="display: flex;">
+                <textarea id="edgeInput" placeholder="VD: 1 2 3"></textarea>
+                <div class="toolbar" style="margin-left: 10px;">
+                    <button onclick="createGraph()">Tạo đồ thị</button><br><br>
+                    <button onclick="findMSTKruskal()">Cây Khung Nhỏ Nhất (Kruskal)</button><br><br>
+                    <button onclick="startPrim()">Cây Khung Nhỏ Nhất (Prim)</button>
+                </div>
+            </div>
+            <div id="network"></div>
+            <div id="result-mst" style="margin-top: 20px; font-size: 18px; color: #333;">Tổng trọng số của cây khung nhỏ nhất: 0</div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vis-network@9.1.2/dist/vis-network.min.js"></script>
+    <script>
+        let network;
+        let nodes = new vis.DataSet();
+        let edges = new vis.DataSet();
+
+        function showKruskalCode() {
+            document.getElementById('code-prim').classList.add('hidden');
+            document.getElementById('code-kruskal').classList.remove('hidden');
+        }
+
+        function showPrimCode() {
+            document.getElementById('code-prim').classList.remove('hidden');
+            document.getElementById('code-kruskal').classList.add('hidden');
+        }
+
+        function createGraph() {
+            nodes.clear();
+            edges.clear();
+
+            const inputText = document.getElementById("edgeInput").value;
+            const lines = inputText.trim().split("\n");
+            const nodesSet = new Set();
+
+            // Xử lý từng dòng để thêm đỉnh và cạnh vào đồ thị
+            lines.forEach(line => {
+                const [start, end, weight] = line.trim().split(" ");
+                if (!nodesSet.has(start)) {
+                    nodes.add({ id: start, label: start });
+                    nodesSet.add(start);
+                }
+                if (!nodesSet.has(end)) {
+                    nodes.add({ id: end, label: end });
+                    nodesSet.add(end);
+                }
+                edges.add({ from: start, to: end, label: weight, length: parseFloat(weight) * 10 });
+            });
+
+            const container = document.getElementById("network");
+            const data = { nodes: nodes, edges: edges };
+            const options = {
+                physics: { enabled: true },
+                interaction: { hover: true },
+                edges: { font: { align: 'top' } }
+            };
+            network = new vis.Network(container, data, options);
+        }
+
+        // Làm mới đồ thị
+        function resetGraphStyles() {
+            edges.update(edges.get().map(edge => ({ id: edge.id, color: { color: '#ccc' }, width: 1 })));
+            nodes.update(nodes.get().map(node => ({ id: node.id, color: { background: '#97c2fc' } })));
+        }
+
+        // Highlight cạnh hoặc đỉnh
+        function highlightEdge(edge, color, width = 3) {
+            edges.update({ id: edge.id, color: { color: color }, width: width });
+        }
+
+        function highlightNode(nodeId, color) {
+            nodes.update({ id: nodeId, color: { background: color } });
+        }
+
+        // Tìm cây khung nhỏ nhất theo Kruskal từng bước
+        async function findMSTKruskal() {
+            resetGraphStyles();
+            resetHighlightCode();
+            showKruskalCode();
+
+            const resultElement = document.getElementById('result-mst');
+            resultElement.innerHTML = 'Tổng trọng số của cây khung nhỏ nhất: 0';
+            const sortedEdges = edges.get().slice().sort((a, b) => parseFloat(a.label) - parseFloat(b.label));
+            highlightCode('k-sort');
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            const parent = {};
+            let totalWeight = 0;
+
+            function find(x) {
+                if (parent[x] !== x) parent[x] = find(parent[x]);
+                return parent[x];
+            }
+
+            function union(x, y) {
+                const rootX = find(x);
+                const rootY = find(y);
+                if (rootX !== rootY) parent[rootX] = rootY;
+            }
+
+            nodes.get().forEach(node => parent[node.id] = node.id);
+            const mstEdges = [];
+
+            for (const edge of sortedEdges) {
+                highlightEdge(edge, '#000000', 2); // Tô đậm cạnh đang xét
+                resetHighlightCode();
+                highlightCode('k-for');
+                await new Promise(resolve => setTimeout(resolve, 1000)); // Chờ trước khi tiếp tục
+
+                resetHighlightCode();
+                highlightCode('k-if');
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                if (find(edge.from) !== find(edge.to)) {
+                    mstEdges.push(edge);
+                    union(edge.from, edge.to);
+                    highlightEdge(edge, '#FFD700', 3); // Highlight cạnh
+                    resetHighlightCode();
+                    highlightCode('k-add1'); highlightCode('k-add2'); highlightCode('k-add3');
+                    totalWeight += parseFloat(edge.label);
+                    resultElement.innerHTML = '';
+                    resultElement.textContent = `Tổng trọng số của cây khung nhỏ nhất: ${totalWeight}`;
+                } else {
+                    highlightEdge(edge, '#D3D3D3', 1); // Làm mờ cạnh
+                }
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                resetHighlightCode();
+                highlightCode('k-ifbr');
+                await new Promise(resolve => setTimeout(resolve, 1000)); // Chờ trước khi xét cạnh tiếp theo
+            }
+            resetHighlightCode();
+            highlightCode('k-br');
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            resetHighlightCode();
+            highlightCode('k-ans');
+            mstEdges.forEach(edge => highlightEdge(edge, '#32CD32', 5));
+        }
+
+        // Yêu cầu nhập đỉnh bắt đầu cho Prim
+        function startPrim() {
+            const startNode = prompt("Nhập đỉnh bắt đầu cho Prim:");
+            if (startNode && nodes.get(startNode)) {
+                findMSTPrim(startNode);
+            } else {
+                alert("Đỉnh không hợp lệ. Vui lòng nhập lại.");
+            }
+        }
+
+        // Tìm cây khung nhỏ nhất theo Prim từng bước
+        async function findMSTPrim(startNode) {
+            resetGraphStyles(); // Làm mới đồ thị
+            resetHighlightCode();
+            showPrimCode();
+
+            const resultElement = document.getElementById('result-mst');
+            resultElement.innerHTML = 'Tổng trọng số của cây khung nhỏ nhất: 0';
+
+            const visited = new Set(); // Tập các đỉnh đã thăm
+            const mstEdges = [];       // Danh sách cạnh thuộc cây khung nhỏ nhất
+            let currentNode = startNode; // Bắt đầu từ đỉnh nhập vào
+            let totalWeight = 0;
+
+            visited.add(currentNode);
+
+            resetHighlightCode();
+            highlightCode('p-while');
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            while (mstEdges.length < nodes.length - 1) {
+                // Highlight đỉnh hiện tại và các cạnh kề
+                highlightNode(currentNode, '#FF4500'); // Màu cam đậm cho đỉnh hiện tại
+                resetHighlightCode();
+                highlightCode('p-node1');
+                highlightCode('p-node2');
+                highlightCode('p-node3');
+                highlightCode('p-node4');
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                resetHighlightCode();
+                highlightCode('p-if1');
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                const adjacentEdges = edges.get().filter(edge =>
+                    (edge.from === currentNode && !visited.has(edge.to)) ||
+                    (edge.to === currentNode && !visited.has(edge.from))
+                );
+
+                // Tô màu đen các cạnh kề
+                adjacentEdges.forEach(edge => highlightEdge(edge, '#000000', 3)); // Màu đen, giữ nguyên
+                resetHighlightCode();
+                highlightCode('p-for');
+                await new Promise(resolve => setTimeout(resolve, 1000)); // Tạm dừng để quan sát
+                resetHighlightCode();
+                highlightCode('p-if2');
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                resetHighlightCode();
+                highlightCode('p-ne1');
+                highlightCode('p-ne2');
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                // Tìm cạnh nhỏ nhất từ tập đã thăm
+                let minEdge = null;
+                edges.get().forEach(edge => {
+                    if (visited.has(edge.from) ^ visited.has(edge.to)) { // Một đầu đã thăm, một đầu chưa
+                        if (!minEdge || parseFloat(edge.label) < parseFloat(minEdge.label)) {
+                            minEdge = edge;
+                        }
+                    }
+                });
+
+                // Highlight cạnh nhỏ nhất (nếu có)
+                if (minEdge) {
+                    highlightEdge(minEdge, '#FFD700', 5); // Tô vàng cho cạnh nhỏ nhất
+                    totalWeight += parseFloat(minEdge.label);
+                    resultElement.innerHTML = '';
+                    resultElement.textContent = `Tổng trọng số của cây khung nhỏ nhất: ${totalWeight}`;
+                    resetHighlightCode();
+                    highlightCode('p-add');
+                    await new Promise(resolve => setTimeout(resolve, 1000)); // Tạm dừng để quan sát
+                }
+
+                // Thêm cạnh được chọn vào cây khung nhỏ nhất
+                if (minEdge) {
+                    mstEdges.push(minEdge);
+
+                    const nextNode = visited.has(minEdge.from) ? minEdge.to : minEdge.from;
+                    visited.add(nextNode);
+
+                    // Chuyển đến đỉnh tiếp theo
+                    highlightNode(currentNode, '#97c2fc'); // Màu xanh nhạt mặc định
+                    currentNode = nextNode;
+                } else {
+                    break; // Nếu không còn cạnh hợp lệ
+                }
+            }
+
+            // Sắp xếp các cạnh không thuộc cây khung theo trọng số (tăng dần)
+            const nonMSTEdges = edges.get().filter(edge => {
+                return !mstEdges.some(mstEdge => mstEdge.id === edge.id);
+            }).sort((a, b) => parseFloat(a.label) - parseFloat(b.label)); // Sắp xếp theo trọng số
+
+            // Làm mờ từng cạnh một theo thứ tự trọng số
+            for (let i = 0; i < nonMSTEdges.length; i++) {
+                resetHighlightCode();
+                highlightCode('p-if1');
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                const edge = nonMSTEdges[i];
+                highlightEdge(edge, '#d3d3d3', 1); // Màu xám nhạt cho cạnh không thuộc cây khung
+                resetHighlightCode();
+                highlightCode('p-con');
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                await new Promise(resolve => setTimeout(resolve, 1000)); // Chờ một chút trước khi làm mờ cạnh tiếp theo
+            }
+
+            resetHighlightCode();
+            highlightCode('p-ans');
+            // Giữ trạng thái cây khung nhỏ nhất
+            mstEdges.forEach(edge => highlightEdge(edge, '#32CD32', 5)); // Màu xanh lá cây
+        }
+
+        function highlightCode(zzz) {
+            const color = document.getElementById(zzz);
+            color.style.backgroundColor = 'yellow';
+        }
+
+        function resetHighlightCode() {
+            document.getElementById('k-sort').style.backgroundColor = '#e6e6e6';
+            document.getElementById('k-for').style.backgroundColor = '#e6e6e6';
+            document.getElementById('k-if').style.backgroundColor = '#e6e6e6';
+            document.getElementById('k-add1').style.backgroundColor = '#e6e6e6';
+            document.getElementById('k-add2').style.backgroundColor = '#e6e6e6';
+            document.getElementById('k-add3').style.backgroundColor = '#e6e6e6';
+            document.getElementById('k-ifbr').style.backgroundColor = '#e6e6e6';
+            document.getElementById('k-br').style.backgroundColor = '#e6e6e6';
+            document.getElementById('k-ans').style.backgroundColor = '#e6e6e6';
+
+            document.getElementById('p-while').style.backgroundColor = '#e6e6e6';
+            document.getElementById('p-node1').style.backgroundColor = '#e6e6e6';
+            document.getElementById('p-node2').style.backgroundColor = '#e6e6e6';
+            document.getElementById('p-node3').style.backgroundColor = '#e6e6e6';
+            document.getElementById('p-node4').style.backgroundColor = '#e6e6e6';
+            document.getElementById('p-if1').style.backgroundColor = '#e6e6e6';
+            document.getElementById('p-con').style.backgroundColor = '#e6e6e6';
+            document.getElementById('p-add').style.backgroundColor = '#e6e6e6';
+            document.getElementById('p-for').style.backgroundColor = '#e6e6e6';
+            document.getElementById('p-if2').style.backgroundColor = '#e6e6e6';
+            document.getElementById('p-ne1').style.backgroundColor = '#e6e6e6';
+            document.getElementById('p-ne2').style.backgroundColor = '#e6e6e6';
+            document.getElementById('p-ans').style.backgroundColor = '#e6e6e6';
+        }
+    </script>
+</body>
+
+</html>
